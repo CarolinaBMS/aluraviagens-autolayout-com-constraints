@@ -17,7 +17,20 @@ class HomeTableViewHeader: UIView {
     
     @IBOutlet weak var bannerImageView: UIImageView!
     
+    @IBOutlet weak var bannerView: UIView!
+    
+    
     func configuraView() {
         headerView.backgroundColor = UIColor(red: 30.0/255, green: 59.0/255, blue: 119.0/255, alpha: 1.0)
+        
+        //arredondar o bannerView
+        bannerView.layer.cornerRadius = 10
+        bannerView.layer.masksToBounds = true
+        
+        headerView.layer.cornerRadius = 500
+        //arredondar a parte inferior do header view
+        headerView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
 }
+
+
