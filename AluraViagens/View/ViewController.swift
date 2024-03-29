@@ -14,10 +14,17 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configuraTableView()
         viagensTableView.dataSource = self
         viagensTableView.delegate = self
         viagensTableView.sectionHeaderTopPadding = 0 //tirar o espaço em branco na parte de cima
         view.backgroundColor = UIColor(red: 30.0/255, green: 59.0/255, blue: 119.0/255, alpha: 1.0)
+    }
+    
+    func configuraTableView() {
+        //Registrando a célula na TableView
+        viagensTableView.register(UINib(nibName: "ViagemTableViewCell", bundle: nil), forCellReuseIdentifier: "ViagemTableViewCell")
+
     }
 }
 
@@ -25,16 +32,26 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource {
     //Configuramos o número de linhas da table view.
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return sessaoDeViagens?[section].numeroDeLinhas ?? 0
     }
     
     //Criamos uma célula para ser exibida.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        //reutilizar a célula
+        guard let celulaViagem = tableView.dequeueReusableCell(withIdentifier: "ViagemTableViewCell") as? ViagemTableViewCell else {
+            fatalError("error to create ViagemTableViewCell")
+        }
         
-        cell.textLabel?.text = "viagem \(indexPath.row)"
+        let viewModel = sessaoDeViagens?[indexPath.section]
         
-        return cell
+        switch viewModel?.tipo {
+        case .destaques:
+            celulaViagem.configuraCelula(viewModel?.viagens[indexPath.row])
+            return celulaViagem
+        default:
+            return UITableViewCell()
+        }
+        
     }
 }
 
@@ -53,6 +70,12 @@ extension ViewController: UITableViewDelegate {
     //Segundo método para a altura do header
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 300
+    }
+    
+    
+    //a celula que criamos tem uma altura de 400, portanto precisamos de um método heightForRow para configuramos a celula
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 400
     }
 } //O delegate é um design pattern que Permite a comunicação entre o objeto e sua implementação. Muito útil para impedir que outros objetos conheçam o tipo concreto de uma classe, por exemplo.
 // A TableView, nos permite configurar cabeçalhos e rodapés de uma seção, excluir e reordenar células, além de realizar outras ações em uma visualização de tabela.
