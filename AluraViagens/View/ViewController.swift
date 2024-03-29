@@ -75,7 +75,7 @@ extension ViewController: UITableViewDelegate {
     
     //a celula que criamos tem uma altura de 400, portanto precisamos de um método heightForRow para configuramos a celula
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 400
+        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone ? 400 : 475
     }
 } //O delegate é um design pattern que Permite a comunicação entre o objeto e sua implementação. Muito útil para impedir que outros objetos conheçam o tipo concreto de uma classe, por exemplo.
 // A TableView, nos permite configurar cabeçalhos e rodapés de uma seção, excluir e reordenar células, além de realizar outras ações em uma visualização de tabela.
